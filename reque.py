@@ -4,6 +4,7 @@ import re
 
 def determinarFestividades(anno, pais) :
     if isinstance(anno,int) and isinstance(pais,str):
+        pais = pais.lower() 
         my_url = "http://www.cuandoenelmundo.com/calendario/"+pais+"/"+str(anno)
         try:
             uClient = uReq(my_url)    
@@ -29,7 +30,8 @@ def determinarFestividades(anno, pais) :
                     
         except:
             print("País o Año no disponible")
-    print("Tipo de datos inválidos")
+    else:
+        print("Tipo de datos inválidos")
 
 
 
