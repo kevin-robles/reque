@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup as soup
 import re
 import calendar
 import goslate
+import os
+from socket import *
 
 def determinarFestividades(anno, pais) :
     #validacion de tipo de dato
@@ -59,8 +61,8 @@ def determinarCalendarioMes(anno,mes,pais):
             mesingles = calendar.month_name[mes]
             
             #traducir a español el mes
-            #gs = goslate.Goslate()
-            #mesespa = gs.translate(mesingles, 'es')
+            gs = goslate.Goslate()
+            mesespa = gs.translate(mesingles, 'es')
             
             #Si tira error urllib.error.HTTPError: HTTP Error 429: Too Many Requests
             switcher = {
@@ -78,7 +80,7 @@ def determinarCalendarioMes(anno,mes,pais):
                 "December":"diciembre"
             }
 
-            mesespa = switcher.get(mesingles,"nothing")
+            #mesespa = switcher.get(mesingles,"nothing")
                 
 
             #Buscar dias fectivos del mes
@@ -122,6 +124,32 @@ def determinarCalendarioMes(anno,mes,pais):
         print("Tipo de dato inválido")
 
         
-   
+def verMensaje():
+    host = '';#mi ip
+    port = 13000;
+    buf = 1024;
+    addr = (host, port);
+    #conexion con el socket
+    UDPSock = socket(AF_INET, SOCK_DGRAM);
+    UDPSock.bind(addr);
+    print ("Esperando por mensajes...");
+    while True:
+        #encuentra un mensaje
+        (data, addr) = UDPSock.recvfrom(buf);
+        print ("Mensaje recibido: " + data.decode('utf-8'));
+        break;
+    UDPSock.close();
+
+
+def enviarMensaje(mensaje):
+    host = '192.168.1.128'; # ip del que recibe el mensaje
+    port = 13000;
+    addr = (host, port);
+    #conexion con el socket
+    UDPSock = socket(AF_INET, SOCK_DGRAM);
+    UDPSock.sendto(mensaje.encode('utf-8'), addr);#envia mensaje
+    UDPSock.close();
+    print("enviado")
+
 
 
